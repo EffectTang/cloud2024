@@ -10,6 +10,7 @@
     <description>Demo project for Spring Boot</description>
     <modules>
         <module>mybatis_generator2024</module>
+        <module>cloud-provider-payment8002</module>
     </modules>
 
 
