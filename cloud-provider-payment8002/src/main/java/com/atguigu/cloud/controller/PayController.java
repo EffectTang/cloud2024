@@ -1,11 +1,13 @@
 package com.atguigu.cloud.controller;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONParser;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.atguigu.cloud.entities.Pay;
 import com.atguigu.cloud.entities.PayDTO;
+import com.atguigu.cloud.resp.ResultData;
 import com.atguigu.cloud.service.PayService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,42 +23,47 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@Tag(name="支付为服务模块",description = "支付CRUD")
 public class PayController {
 
     @Resource
     private PayService payService;
 
     @PostMapping("/pay/add")
-    public String addPay(@RequestBody Pay pay){
-        System.out.println(pay.toString());
+    @Operation(summary = "新增",description = "新增支付流水方法,json串做参数")
+    public ResultData<String> addPay(@RequestBody Pay pay){
         int i = payService.add(pay);
-        return "success num is " + i;
+        return ResultData.success("the effective number is "+i);
     }
 
     @DeleteMapping("/pay/delete/{id}")
-    public Integer deletePay(@PathVariable("id")Integer id ){
-        return payService.delete(id);
+    @Operation(summary = "删除",description = "删除支付流水方法")
+    public ResultData<String> deletePay(@PathVariable("id")Integer id ){
+        int num = payService.delete(id);
+        return ResultData.success("the effective number is "+num);
     }
 
     @GetMapping("/pay/get/{id}")
-    public Pay getById(@PathVariable("id")Integer id){
+    @Operation(summary = "按照ID查流水",description = "查询支付流水方法")
+    public ResultData<Pay> getById(@PathVariable("id")Integer id){
         Pay pay = payService.getById(id);
-        System.out.println(pay.toString());
-        return pay;
+        return ResultData.success(pay);
     }
 
     @PutMapping("/pay/update")
-    public String update(@RequestBody PayDTO payDTO){
+    @Operation(summary = "修改",description = "修改支付流水方法")
+    public ResultData<String> update(@RequestBody PayDTO payDTO){
         Pay pay = new Pay();
         BeanUtils.copyProperties(payDTO,pay);
         int i = payService.update(pay);
-        return "the effective number of result is " + i;
+        return ResultData.success("the effective number of result is " + i);
     }
 
     @GetMapping("/pay/get/all")
-    public String getAll(){
+    @Operation(summary = "查询所有的流水",description = "查询所有支付流水方法")
+    public ResultData<List<Pay>> getAll(){
         List<Pay> pays = payService.getAll();
-        return JSON.toJSONString(pays);
+        return ResultData.success(pays);
     }
 
 }
