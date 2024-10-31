@@ -1,7 +1,5 @@
 package com.atguigu.cloud.controller;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.atguigu.cloud.entities.Pay;
 import com.atguigu.cloud.entities.PayDTO;
 import com.atguigu.cloud.resp.ResultData;
@@ -14,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author starlord
@@ -47,6 +46,9 @@ public class PayController {
     @Operation(summary = "按照ID查流水",description = "查询支付流水方法")
     public ResultData<Pay> getById(@PathVariable("id")Integer id){
         Pay pay = payService.getById(id);
+        if(Objects.isNull(pay)){
+            throw new RuntimeException("找不到对应id");
+        }
         return ResultData.success(pay);
     }
 
