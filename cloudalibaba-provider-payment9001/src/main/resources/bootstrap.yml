@@ -1,0 +1,11 @@
+#
+server:
+  port: 9001
+
+spring:
+  application:
+    name: nacos-payment-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848  # 配置 Nacos 地址
